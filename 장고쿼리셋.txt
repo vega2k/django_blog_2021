@@ -1,3 +1,4 @@
+django queryset code
 (base) C:\mypython\django_fw>python manage.py shell
 Python 3.8.5 (default, Sep  3 2020, 21:29:08) [MSC v.1916 64 bit (AMD64)]
 Type 'copyright', 'credits' or 'license' for more information
