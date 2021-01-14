@@ -2,12 +2,39 @@ from django.http import HttpResponse
 from django.shortcuts import render, get_object_or_404, redirect
 from django.utils import timezone
 from django.contrib.auth.models import User
+from django.contrib.auth.decorators import login_required
 
 from .models import Post
 from .forms import PostModelForm, PostForm
 
+# Post 삭제
+@login_required
+def post_remove(request, pk):
+    post = get_object_or_404(Post, pk=pk)
+    post.delete()
+    return redirect('post_list')
+
+# Post 수정 : ModelForm 사용
+@login_required
+def post_edit(request, pk):
+    post = get_object_or_404(Post, pk=pk)
+    if request.method == 'POST':
+        form = PostModelForm(request.POST, instance=post)
+        if form.is_valid():
+            post = form.save(commit=False)
+            # 작성자
+            post.author = User.objects.get(username=request.user.username)
+            # 글게시날짜
+            post.published_date = timezone.now()
+            # 실제 갱신됨
+            post.save()
+            return redirect('post_detail', pk=post.pk)
+    else:
+        form = PostModelForm(instance=post)
+    return render(request, 'blog/post_edit.html', {'form': form})
+
 # Post 등록 : Form 사용
-def post_new(request):
+def post_new_form(request):
     if request.method == 'POST':
         form = PostForm(request.POST)
         if form.is_valid():
@@ -24,7 +51,8 @@ def post_new(request):
     return render(request, 'blog/post_edit.html', {'form': form})
 
 # Post 등록 : ModelForm 사용
-def post_new_model(request):
+@login_required
+def post_new(request):
     if request.method == 'POST':
         # 실제 등록 처리하기
         form = PostModelForm(request.POST)
