@@ -194,3 +194,23 @@ In [11]: for comment in comments:
 1 길동 2
 2 둘리 2
 
+----------- Post에 approved_comments() 추가
+In [1]: from blog.models import Post, Comment
+
+In [2]: posts = Post.objects.all()
+
+In [3]: for post in posts:
+   ...:     print(post.pk, post.comments.count())
+2 4
+4 1
+7 0
+8 0
+9 0
+
+In [4]: post2 = Post.objects.get(id=2)
+
+In [5]: post2.comments.count()
+Out[5]: 4
+In [8]: post2.approved_comments().count()
+Out[8]: 3
+
