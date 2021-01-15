@@ -185,7 +185,7 @@ In [9]: comments = post2.comments.all()
 In [10]: for comment in comments:
     ...:     print(comment.id, comment.author, comment.text, comment.post)
     ...:
-1 길동 두번째글의 댓글1 두번째글 수정
+1 길동 두번째글의 댓글1 두번째글 수정(post의 title)
 2 둘리 두번째글의 댓글2 두번째글 수정
 
 In [11]: for comment in comments:
